@@ -1,10 +1,10 @@
 /*
  * Copyright (C) 2019 Aidan Williams
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,7 +27,12 @@ static struct option long_options[] = {
 };
 
 void version() {
-    puts("pwr 1.0");
+    puts("pwr v1.0");
+    puts("Copyright (C) 2019 Aidan Williams");
+    puts("License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.");
+    puts("This is free software: you are free to change and redistribute it.");
+    puts("There is NO WARRANTY, to the extent permitted by law.\n");
+    puts("Written by Aidan Williams");
     exit(EXIT_SUCCESS);
 }
 

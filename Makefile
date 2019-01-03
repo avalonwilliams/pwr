@@ -1,11 +1,9 @@
-# vim: set noexpandtab tabstop=4 shiftwidth=4:
-
 # Copyright (C) 2019 Aidan Williams
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,19 +13,35 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 ifeq ($(PREFIX),)
 	PREFIX := /usr/local
 endif
 
-pwr: pwr.c pwr.h
-	gcc $(DEBUG) -o pwr pwr.c pwr.h
+ifeq ($(BINARY),)
+	BINARY := pwr
+endif
+
+ifeq ($(CC),)
+	CC := cc
+endif
+
+SOURCES := $(shell find -name "*.c")
+SOURCES += $(shell find -name "*.h")
+
+pwr: $(SOURCES)
+	$(CC) -o $(BINARY) $(SOURCES)
+
+debug: $(SOURCES)
+	$(CC) -g -o $(BINARY) $(SOURCES)
 
 clean:
-	rm pwr
+	rm $(BINARY)
 
 install: pwr
 	install -d $(DESTDIR)$(PREFIX)/bin
-	install -m 755 pwr $(DESTDIR)$(PREFIX)/bin
+	install -m 755 $(BINARY) $(DESTDIR)$(PREFIX)/bin
 
 run: pwr
-	./pwr
+	./$(BINARY)
+
