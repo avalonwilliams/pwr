@@ -29,3 +29,5 @@ install: pwr
 	install -d $(DESTDIR)$(PREFIX)/bin
 	install -m 755 pwr $(DESTDIR)$(PREFIX)/bin
 
+run: pwr
+	./pwr
