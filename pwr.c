@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
             case 'v':
                 version();
             default:
-                usage(argv[0], 1);
+                usage(argv[0], EINVAL);
         }
     }
 
