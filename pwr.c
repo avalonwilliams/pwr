@@ -36,24 +36,15 @@ void version() {
     exit(EXIT_SUCCESS);
 }
 
-void usage(char* progpth, bool err) {
-    FILE* stream;
-    if(err) {
-        stream = stderr;
-    } else {
-        stream = stdout;
-    }
+void usage(char* progpth, int err) {
+    FILE* stream = err ? stderr : stdout;
     
-    printf("Usage: %s [OPTIONS]\n\n", progpth);
-    puts("-h, --help  \tPrints this help text");
-    puts("-p, --pretty\tPretty prints output");
-    puts("-f, --force \tForces path defined by argument given");
+    fprintf(stream, "Usage: %s [OPTIONS]\n\n", progpth);
+    fputs("-h, --help  \tPrints this help text\n", stream);
+    fputs("-p, --pretty\tPretty prints output\n", stream);
+    fputs("-f, --force \tForces path defined by argument given\n", stream);
 
-    if(err) {
-        exit(EXIT_FAILURE);
-    } else {
-        exit(EXIT_SUCCESS);
-    }
+    exit(err);
 };
 
 // Internal for getting power from the path of a sysfs battery
@@ -111,11 +102,11 @@ int main(int argc, char **argv) {
                 printf(fmt, fpwr(optarg));
                 exit(0);
             case 'h':
-                usage(argv[0], false);
+                usage(argv[0], 0);
             case 'v':
                 version();
             default:
-                usage(argv[0], true);
+                usage(argv[0], 1);
         }
     }
 

@@ -19,14 +19,12 @@
 #ifndef PWR_H
 #define PWR_H
 
-#include <stdbool.h>
-
 #include <errno.h>
+#include <getopt.h>
+#include <glob.h>
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <glob.h>
-#include <getopt.h>
-
 
 // Gets power from a sysfs file on Linux
 int sysfspower(const char* path);
