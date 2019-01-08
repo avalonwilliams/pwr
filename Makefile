@@ -13,27 +13,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-ifeq ($(PREFIX),)
-	PREFIX := /usr/local
-endif
-
-ifeq ($(BINARY),)
-	BINARY := pwr
-endif
-
-ifeq ($(CC),)
-	CC := cc
-endif
+PREFIX ?= /usr/local
+BINARY ?= pwr
+CC ?= cc
 
 SOURCES := $(shell find -name "*.c")
 SOURCES += $(shell find -name "*.h")
 
 pwr: $(SOURCES)
-	$(CC) -o $(BINARY) $(SOURCES)
+	$(CC) $(CFLAGS) -o $(BINARY) $(SOURCES)
 
 debug: $(SOURCES)
-	$(CC) -g -o $(BINARY) $(SOURCES)
+	$(CC) $(CFLAGS) -g -o $(BINARY) $(SOURCES)
 
 clean:
 	rm $(BINARY)
