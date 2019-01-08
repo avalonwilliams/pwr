@@ -18,6 +18,18 @@
 
 #include "pwr.h"
 
+static const char* versionstr = "pwr v1.0\n"
+                                "Copyright (C) 2019 Aidan Williams\n"
+                                "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
+                                "This is free software: you are free to change and redistribute it.\n"
+                                "There is NO WARRANTY, to the extent permitted by law.\n\n"
+                                "Writter by Aidan Williams\n";
+
+static const char* usagestr = "Usage: %s [OPTIONS]\n\n"
+                              "-h, --help  \tPrints this help text\n"
+                              "-p, --pretty\tPretty prints output\n"
+                              "-f, --force \tForces path defined by argument given\n";
+
 static struct option long_options[] = {
     { "help",    no_argument,       NULL, 'h' },
     { "pretty",  no_argument,       NULL, 'p' },
@@ -26,24 +38,11 @@ static struct option long_options[] = {
     { NULL,      0,                 0,    0   }
 };
 
-void version() {
-    puts("pwr v1.0");
-    puts("Copyright (C) 2019 Aidan Williams");
-    puts("License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.");
-    puts("This is free software: you are free to change and redistribute it.");
-    puts("There is NO WARRANTY, to the extent permitted by law.\n");
-    puts("Written by Aidan Williams");
-    exit(EXIT_SUCCESS);
-}
-
 void usage(char* progpth, int err) {
     FILE* stream = err ? stderr : stdout;
     
-    fprintf(stream, "Usage: %s [OPTIONS]\n\n", progpth);
-    fputs("-h, --help  \tPrints this help text\n", stream);
-    fputs("-p, --pretty\tPretty prints output\n", stream);
-    fputs("-f, --force \tForces path defined by argument given\n", stream);
-
+    fprintf(stream, usagestr, progpth);
+    
     exit(err);
 };
 
@@ -100,11 +99,12 @@ int main(int argc, char **argv) {
                 break;
             case 'f':
                 printf(fmt, fpwr(optarg));
-                exit(0);
+                exit(EXIT_SUCCESS);
             case 'h':
                 usage(argv[0], 0);
             case 'v':
-                version();
+                puts(versionstr);
+                exit(EXIT_SUCCESS);
             default:
                 usage(argv[0], EINVAL);
         }
