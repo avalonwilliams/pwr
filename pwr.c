@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
                 printf(fmt, fpwr(optarg));
                 exit(EXIT_SUCCESS);
             case 'h':
-                usage(argv[0], 0);
+                usage(argv[0], EXIT_SUCCESS);
             case 'v':
                 puts(versionstr);
                 exit(EXIT_SUCCESS);
@@ -111,5 +111,5 @@ int main(int argc, char **argv) {
     }
 
     printf(fmt, pwr());
-    return 0;
+    return EXIT_SUCCESS;
 }
