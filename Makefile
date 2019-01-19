@@ -18,7 +18,6 @@ BINARY ?= pwr
 CC ?= cc
 
 SOURCES := $(shell find -name "*.c")
-SOURCES += $(shell find -name "*.h")
 
 pwr: $(SOURCES)
 	$(CC) $(CFLAGS) -o $(BINARY) $(SOURCES)
