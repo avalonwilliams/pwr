@@ -26,7 +26,7 @@ debug: $(SOURCES)
 	$(CC) $(CFLAGS) -g -o $(BINARY) $(SOURCES)
 
 clean:
-	rm $(BINARY)
+	[ ! -f $(BINARY) ] || rm $(BINARY)
 
 install: pwr
 	install -d $(DESTDIR)$(PREFIX)/bin

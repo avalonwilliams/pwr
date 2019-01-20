@@ -15,15 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "pwr.h"
+
+#include <errno.h>
+#include <getopt.h>
+#include <glob.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 static const char* versionstr = "pwr v1.0\n"
                                 "Copyright (C) 2019 Aidan Williams\n"
                                 "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
                                 "This is free software: you are free to change and redistribute it.\n"
                                 "There is NO WARRANTY, to the extent permitted by law.\n\n"
-                                "Writter by Aidan Williams\n";
+                                "Written by Aidan Williams\n";
 
 static const char* usagestr = "Usage: %s [OPTIONS]\n\n"
                               "-h, --help  \tPrints this help text\n"
@@ -90,15 +97,15 @@ int fpwr(const char* frcpath) {
 
 int main(int argc, char **argv) {
     int opt;
-    char* fmt = "%d\n";
+    char* pwrfmt = "%d\n";
 
-    while((opt = getopt_long(argc, argv, "pfhv", long_options, NULL)) != -1) {
+    while((opt = getopt_long(argc, argv, "pmfhv", long_options, NULL)) != -1) {
         switch(opt) {
             case 'p':
-                fmt = "%d\%\n";
+                pwrfmt = "%d%%\n";
                 break;
             case 'f':
-                printf(fmt, fpwr(optarg));
+                printf(pwrfmt, fpwr(optarg));
                 exit(EXIT_SUCCESS);
             case 'h':
                 usage(argv[0], EXIT_SUCCESS);
@@ -110,6 +117,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    printf(fmt, pwr());
+    printf(pwrfmt, pwr());
+
     return EXIT_SUCCESS;
 }
