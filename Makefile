@@ -16,6 +16,7 @@
 PREFIX ?= /usr/local
 BINARY ?= pwr
 BINDIR ?= bin
+PERMS ?= 755
 CC ?= cc
 
 SOURCES := $(shell find -name "*.c")
@@ -31,7 +32,7 @@ clean:
 
 install: pwr
 	install -d $(DESTDIR)$(PREFIX)/$(BINDIR)
-	install -m 755 $(BINARY) $(DESTDIR)$(PREFIX)/$(BINDIR)
+	install -m $(PERMS) $(BINARY) $(DESTDIR)$(PREFIX)/$(BINDIR)
 
 run: pwr
 	./$(BINARY)
