@@ -15,8 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pwr.h"
-
 #include <errno.h>
 #include <getopt.h>
 #include <glob.h>
