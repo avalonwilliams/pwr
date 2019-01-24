@@ -1,5 +1,5 @@
 # Copyright (C) 2019 Aidan Williams
-
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -15,6 +15,7 @@
 
 PREFIX ?= /usr/local
 BINARY ?= pwr
+BINDIR ?= bin
 CC ?= cc
 
 SOURCES := $(shell find -name "*.c")
@@ -29,8 +30,8 @@ clean:
 	[ ! -f $(BINARY) ] || rm $(BINARY)
 
 install: pwr
-	install -d $(DESTDIR)$(PREFIX)/bin
-	install -m 755 $(BINARY) $(DESTDIR)$(PREFIX)/bin
+	install -d $(DESTDIR)$(PREFIX)/$(BINDIR)
+	install -m 755 $(BINARY) $(DESTDIR)$(PREFIX)/$(BINDIR)
 
 run: pwr
 	./$(BINARY)
