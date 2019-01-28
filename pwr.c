@@ -43,8 +43,9 @@ static struct option long_options[] = {
     { NULL,      0,                 0,    0   }
 };
 
-void usage(char* progpth, int err) {
-    FILE* stream = err ? stderr : stdout;
+void usage(char* progpth, int err)
+{
+    FILE *stream = err ? stderr : stdout;
     
     fprintf(stream, usagestr, progpth);
     
@@ -52,8 +53,9 @@ void usage(char* progpth, int err) {
 };
 
 // Internal for getting power from the path of a sysfs battery
-int sysfspwr(const char* path) {
-    FILE* fptr;
+int sysfspwr(const char* path)
+{
+    FILE *fptr;
     int percent = 0;
 
     fptr = fopen(path, "r");
@@ -68,7 +70,8 @@ int sysfspwr(const char* path) {
     return percent;
 }
 
-int pwr() {
+int pwr()
+{
     glob_t glb;
     glob("/sys/class/power_supply/*/capacity", 0, NULL, &glb);
 
@@ -89,13 +92,15 @@ int pwr() {
     return avrg;
 }
 
-int fpwr(const char* frcpath) {
+int fpwr(const char *frcpath)
+{
     return sysfspwr(frcpath);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     int opt;
-    char* pwrfmt = "%d\n";
+    char *pwrfmt = "%d\n";
 
     while((opt = getopt_long(argc, argv, "pmfhv", long_options, NULL)) != -1) {
         switch(opt) {
