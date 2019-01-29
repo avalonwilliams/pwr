@@ -32,23 +32,21 @@ static const char* versionstr = "pwr v1.0\n"
 
 static const char* usagestr = "Usage: %s [OPTIONS]\n\n"
 			      "-h, --help  \tPrints this help text\n"
-			      "-p, --pretty\tPretty prints output\n"
-			      "-f, --force \tForces path defined by argument given\n";
+			      "-f, --format\tPrints output according to the format string defined by the argument given\n"
+			      "-s, --single\tGets power from battery defined by argument given\n";
 
 static struct option long_options[] = {
 	{ "help",    no_argument,       NULL, 'h' },
-	{ "pretty",  no_argument,       NULL, 'p' },
-	{ "force",   required_argument, NULL, 'f' },
+	{ "format",  required_argument, NULL, 'f' },
+	{ "single",  required_argument, NULL, 's' },
 	{ "version", no_argument,       NULL, 'v' },
-	{ NULL,      0,		 0,    0   }
+	{ NULL,      0,		        0,    0	  }
 };
 
 void usage(char *progpth, int err)
 {
 	FILE *stream = err ? stderr : stdout;
-	
 	fprintf(stream, usagestr, progpth);
-	
 	exit(err);
 };
 
@@ -92,9 +90,16 @@ int pwr()
 	return avrg;
 }
 
-int fpwr(const char *frcpath)
+int fpwr(const char *frcbat)
 {
-	return sysfspwr(frcpath);
+	char *tmp = malloc(
+		sizeof("/sys/class/power_supply//capacity") 
+		+ sizeof(frcbat) 
+		- 1 // account for null byte at end of strings
+	);
+
+	sprintf(tmp, "/sys/class/power_supply/%s/capacity", frcbat);
+	return sysfspwr(strdup(tmp));
 }
 
 int main(int argc, char **argv)
@@ -102,14 +107,14 @@ int main(int argc, char **argv)
 	int opt;
 	char *pwrfmt = "%d\n";
 
-	while ((opt = getopt_long(argc, argv, "pmfhv", long_options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "mf:s:hv", long_options, NULL)) != -1) {
 		switch (opt) {
-		case 'p':
-			pwrfmt = "%d%%\n";
-			break;
 		case 'f':
-			printf(pwrfmt, fpwr(optarg));
-			exit(EXIT_SUCCESS);
+			pwrfmt = optarg;
+			break;
+		case 's':
+			pwrfmt = optarg;
+			break;
 		case 'h':
 			usage(argv[0], EXIT_SUCCESS);
 		case 'v':
