@@ -105,6 +105,7 @@ int fpwr(const char *frcbat)
 int main(int argc, char **argv)
 {
 	int opt;
+	char *battery;
 	char *pwrfmt = "%d\n";
 
 	while ((opt = getopt_long(argc, argv, "mf:s:hv", long_options, NULL)) != -1) {
@@ -113,7 +114,7 @@ int main(int argc, char **argv)
 			pwrfmt = optarg;
 			break;
 		case 's':
-			pwrfmt = optarg;
+			battery = optarg;	
 			break;
 		case 'h':
 			usage(argv[0], EXIT_SUCCESS);
@@ -124,8 +125,12 @@ int main(int argc, char **argv)
 			usage(argv[0], EINVAL);
 		}
 	}
-
-	printf(pwrfmt, pwr());
+	
+	if (!battery) {
+		printf(pwrfmt, pwr());
+	} else {
+		printf(pwrfmt, fpwr(battery));
+	}
 
 	return EXIT_SUCCESS;
 }
