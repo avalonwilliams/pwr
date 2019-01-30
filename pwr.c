@@ -126,11 +126,7 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	if (!battery) {
-		printf(pwrfmt, pwr());
-	} else {
-		printf(pwrfmt, fpwr(battery));
-	}
+	printf(pwrfmt, battery ? fpwr(battery) : pwr());	
 
 	return EXIT_SUCCESS;
 }
