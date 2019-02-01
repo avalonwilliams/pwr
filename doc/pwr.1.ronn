@@ -1,0 +1,36 @@
+pwr(1) -- prints power information
+==================================
+
+## SYNOPSIS
+
+`pwr` [OPTIONS]
+
+## DESCRIPTION
+
+Prints power information from the system. Includes optionally singling out an arbitrary battery and optionally outputting it in a custom format. 
+
+## OPTIONS
+
+* `-f`, `--format`=<FORMAT>:
+    Sets output format as specified by <FORMAT>
+
+* `-h`, `--help`:
+    Prints the help text
+
+* `-s`, `--single`=<BATTERY>:
+    Prints power for a single battery, which is defined by <BATTERY>
+
+* `-v`, `--version`:
+    Prints the version information
+
+## AUTHOR
+
+Written by Aidan Williams
+
+## COPYRIGHT
+```
+Copyright (C) 2019 Aidan Williams
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenes/gpl.html>
+This is free software; you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+```

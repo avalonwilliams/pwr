@@ -31,9 +31,10 @@ static const char* versionstr = "pwr v1.0\n"
 				"Written by Aidan Williams\n";
 
 static const char* usagestr = "Usage: %s [OPTIONS]\n\n"
-			      "-h, --help  \tPrints this help text\n"
-			      "-f, --format\tPrints output according to the format string defined by the argument given\n"
-			      "-s, --single\tGets power from battery defined by argument given\n";
+			      "-h, --help   \tPrints this help text\n"
+			      "-v, --version\tPrints the version information\n"
+			      "-f, --format \tPrints output according to the format string defined by the argument given\n"
+			      "-s, --single \tGets power from battery defined by argument given\n";
 
 static struct option long_options[] = {
 	{ "help",    no_argument,       0, 'h' },
@@ -43,6 +44,8 @@ static struct option long_options[] = {
 	{ 0,         0,		        0, 0   }
 };
 
+// prints usage
+// note that err is expected to be 0 when succsessful
 void usage(char *progpth, int err)
 {
 	FILE *stream = err ? stderr : stdout;
@@ -68,6 +71,7 @@ int sysfspwr(const char *path)
 	return percent;
 }
 
+// gets the average power of all of the system batteries
 int pwr()
 {
 	glob_t glb;
@@ -90,6 +94,7 @@ int pwr()
 	return avrg;
 }
 
+// gets the power of the specified battery
 int fpwr(const char *frcbat)
 {
 	char *tmp = malloc(
@@ -102,7 +107,6 @@ int fpwr(const char *frcbat)
 	
 	int batpwr = sysfspwr(tmp);
 	free(tmp);
-	
 	return batpwr;
 }
 
