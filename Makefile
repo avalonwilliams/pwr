@@ -16,7 +16,7 @@
 PREFIX ?= /usr/local
 BINDIR ?= bin
 MANDIR ?= man/man1
-DOCDIR ?= doc/pwr
+DOCDIR ?= share/doc/pwr
 PERMS ?= 755
 DOCPERMS ?= 644
 CC ?= cc
