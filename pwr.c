@@ -36,11 +36,11 @@ static const char* usagestr = "Usage: %s [OPTIONS]\n\n"
 			      "-s, --single\tGets power from battery defined by argument given\n";
 
 static struct option long_options[] = {
-	{ "help",    no_argument,       NULL, 'h' },
-	{ "format",  required_argument, NULL, 'f' },
-	{ "single",  required_argument, NULL, 's' },
-	{ "version", no_argument,       NULL, 'v' },
-	{ NULL,      0,		        0,    0	  }
+	{ "help",    no_argument,       0, 'h' },
+	{ "format",  required_argument, 0, 'f' },
+	{ "single",  required_argument, 0, 's' },
+	{ "version", no_argument,       0, 'v' },
+	{ 0,         0,		        0, 0   }
 };
 
 void usage(char *progpth, int err)
@@ -71,7 +71,7 @@ int sysfspwr(const char *path)
 int pwr()
 {
 	glob_t glb;
-	glob("/sys/class/power_supply/*/capacity", 0, NULL, &glb);
+	glob("/sys/class/power_supply/*/capacity", 0, 0, &glb);
 
 	int avrg = 0;
 	int avgtot = 0;
@@ -83,7 +83,7 @@ int pwr()
 	}
 
 	avrg = avgtot / glb.gl_pathc;
-
+	
 	// Free up memory
 	globfree(&glb);
 
@@ -107,8 +107,8 @@ int main(int argc, char **argv)
 	int opt;
 	char *battery;
 	char *pwrfmt = "%d\n";
-
-	while ((opt = getopt_long(argc, argv, "mf:s:hv", long_options, NULL)) != -1) {
+	
+	while ((opt = getopt_long(argc, argv, "mf:s:hv", long_options, 0)) != -1) {
 		switch (opt) {
 		case 'f':
 			pwrfmt = optarg;
@@ -127,6 +127,6 @@ int main(int argc, char **argv)
 	}
 	
 	printf(pwrfmt, battery ? fpwr(battery) : pwr());	
-
+	
 	return EXIT_SUCCESS;
 }
