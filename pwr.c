@@ -64,7 +64,7 @@ int sysfspwr(const char *path)
 		fprintf(stderr, "Error opening file: %s", path);
 		exit(EIO);
 	}
-
+	
 	return percent;
 }
 
@@ -99,13 +99,17 @@ int fpwr(const char *frcbat)
 	);
 
 	sprintf(tmp, "/sys/class/power_supply/%s/capacity", frcbat);
-	return sysfspwr(strdup(tmp));
+	
+	int batpwr = sysfspwr(tmp);
+	free(tmp);
+	
+	return batpwr;
 }
 
 int main(int argc, char **argv)
 {
 	int opt;
-	char *battery;
+	char *battery = 0;
 	char *pwrfmt = "%d\n";
 	
 	while ((opt = getopt_long(argc, argv, "mf:s:hv", long_options, 0)) != -1) {
