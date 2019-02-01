@@ -16,7 +16,9 @@
 PREFIX ?= /usr/local
 BINDIR ?= bin
 MANDIR ?= man/man1
+DOCDIR ?= doc/pwr
 PERMS ?= 755
+DOCPERMS ?= 644
 CC ?= cc
 
 SOURCES := $(shell find -name "*.c")
@@ -36,10 +38,12 @@ clean:
 install: pwr
 	install -d $(DESTDIR)$(PREFIX)/$(BINDIR)
 	install -m $(PERMS) pwr $(DESTDIR)$(PREFIX)/$(BINDIR)
-	
+	install -d $(DESTDIR)$(PREFIX)/$(DOCDIR)
+	install -m $(DOCPERMS) COPYING $(DESTDIR)$(PREFIX)/$(DOCDIR)
+	install -m $(DOCPERMS) README.md $(DESTDIR)$(PREFIX)/$(DOCDIR)
 	[ ! -f doc/pwr.1 ] || \
 		(install -d $(DESTDIR)$(PREFIX)/$(MANDIR) && \
-		install -m $(PERMS) doc/pwr.1 $(DESTDIR)$(PREFIX)/$(MANDIR) && \
+		install -m $(DOCPERMS) doc/pwr.1 $(DESTDIR)$(PREFIX)/$(MANDIR) && \
 		gzip -f $(DESTDIR)$(PREFIX)/$(MANDIR)/pwr.1)
 
 run: pwr
