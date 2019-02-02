@@ -41,7 +41,7 @@ static struct option long_options[] = {
 	{ "format",  required_argument, 0, 'f' },
 	{ "single",  required_argument, 0, 's' },
 	{ "version", no_argument,       0, 'v' },
-	{ 0,         0,		        0, 0   }
+	{ 0, 0, 0, 0 }
 };
 
 // prints usage
