@@ -41,6 +41,7 @@ static struct option long_options[] = {
 	{ "format",  required_argument, 0, 'f' },
 	{ "single",  required_argument, 0, 's' },
 	{ "version", no_argument,       0, 'v' },
+	{ 0,         0,		        0, 0   }
 };
 
 // prints usage
@@ -57,12 +58,13 @@ int sysfspwr(const char *path)
 {
 	FILE *fptr;
 	int percent = 0;
-	
-	if ((fptr = fopen(path, "r"))) {
+
+	fptr = fopen(path, "r");
+	if (fptr) {
 		fscanf(fptr, "%d", &percent);
 		fclose(fptr);
 	} else {
-		fprintf(stderr, "Error opening file: %s\n", path);
+		fprintf(stderr, "Error opening file: %s", path);
 		exit(EIO);
 	}
 	
@@ -75,10 +77,12 @@ int pwr()
 	glob_t glb;
 	glob("/sys/class/power_supply/*/capacity", 0, 0, &glb);
 
-	int avrg = 0, avgtot = 0;
+	int avrg = 0;
+	int avgtot = 0;
 
 	// Averages battery
-	for (int i = 0; i < glb.gl_pathc; i++) {
+	int i;
+	for (i = 0; i < glb.gl_pathc; i++) {
 		avgtot += sysfspwr(glb.gl_pathv[i]);
 	}
 
@@ -103,14 +107,14 @@ int fpwr(const char *frcbat)
 	
 	int batpwr = sysfspwr(tmp);
 	free(tmp);
-
 	return batpwr;
 }
 
 int main(int argc, char **argv)
 {
 	int opt;
-	char *battery = 0, *pwrfmt = "%d\n";
+	char *battery = 0;
+	char *pwrfmt = "%d\n";
 	
 	while ((opt = getopt_long(argc, argv, "mf:s:hv", long_options, 0)) != -1) {
 		switch (opt) {
