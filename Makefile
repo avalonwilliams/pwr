@@ -13,22 +13,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-PREFIX ?= /usr/local
-BINDIR ?= bin
-MANDIR ?= man/man1
-DOCDIR ?= share/doc/pwr
-PERMS ?= 755
+# Install variables
+PREFIX   ?= /usr/local
+BINDIR   ?= bin
+MANDIR   ?= man/man1
+DOCDIR   ?= share/doc/pwr
+BINPERMS ?= 755
 DOCPERMS ?= 644
-CC ?= cc
 
-SOURCES := $(shell find -name "*.c")
+# Build variables
+STD      ?= c99
+CC       ?= cc
+
+# Allows for dropping in code with minimal modifications to the makefile
+SOURCES := $(shell find ./ -name "*.c")
 
 
 pwr: $(SOURCES)
-	$(CC) $(CFLAGS) -o pwr $(SOURCES)
+	$(CC) -std=$(STD) $(CFLAGS) -o pwr $(SOURCES)
 
 debug: $(SOURCES)
-	$(CC) $(CFLAGS) -g -o pwr $(SOURCES)
+	$(CC) -std=$(STD) $(CFLAGS) -g -o pwr $(SOURCES)
 
 clean:
 	[ ! -f pwr ] || rm pwr
@@ -37,18 +42,20 @@ clean:
 
 install: pwr
 	install -d $(DESTDIR)$(PREFIX)/$(BINDIR)
-	install -m $(PERMS) pwr $(DESTDIR)$(PREFIX)/$(BINDIR)
+	install -m $(BINPERMS) pwr $(DESTDIR)$(PREFIX)/$(BINDIR)
 	install -d $(DESTDIR)$(PREFIX)/$(DOCDIR)
 	install -m $(DOCPERMS) COPYING $(DESTDIR)$(PREFIX)/$(DOCDIR)
 	install -m $(DOCPERMS) README.md $(DESTDIR)$(PREFIX)/$(DOCDIR)
 	[ ! -f doc/pwr.1 ] || \
 		(install -d $(DESTDIR)$(PREFIX)/$(MANDIR) && \
 		install -m $(DOCPERMS) doc/pwr.1 $(DESTDIR)$(PREFIX)/$(MANDIR) && \
-		gzip -f $(DESTDIR)$(PREFIX)/$(MANDIR)/pwr.1)
+		gzip -f $(DESTDIR)$(PREFIX)/$(MANDIR)/pwr.1 \
+		man -u pwr)
 
 run: pwr
 	./pwr
 
 .PHONY: docs
 docs: doc/pwr.1.ronn
-	ronn doc/pwr.1.ronn
+	ronn -r doc/pwr.1.ronn
+
