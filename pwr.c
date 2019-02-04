@@ -65,7 +65,7 @@ int sysfspwr(const char *path)
 		fprintf(stderr, "Error opening file: %s\n", path);
 		exit(EIO);
 	}
-	
+
 	return percent;
 }
 
@@ -82,7 +82,7 @@ int pwr()
 		avgtot += sysfspwr(glb.gl_pathv[i]);
 
 	avrg = avgtot / glb.gl_pathc;
-	
+
 	// Free up memory
 	globfree(&glb);
 
@@ -99,7 +99,7 @@ int fpwr(const char *frcbat)
 	);
 
 	sprintf(tmp, "/sys/class/power_supply/%s/capacity", frcbat);
-	
+
 	int batpwr = sysfspwr(tmp);
 	free(tmp);
 	return batpwr;
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 {
 	int opt;
 	char *battery = NULL, *pwrfmt = "%d\n";
-	
+
 	while ((opt = getopt_long(argc, argv, "mf:s:hv", long_options, 0)) != -1) {
 		switch (opt) {
 		case 'f':
@@ -127,8 +127,8 @@ int main(int argc, char **argv)
 			usage(argv[0], EINVAL);
 		}
 	}
-	
+
 	printf(pwrfmt, battery ? fpwr(battery) : pwr());	
-	
+
 	return 0;
 }
