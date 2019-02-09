@@ -49,9 +49,7 @@ install: pwr
 	[ ! -f doc/pwr.1 ] || \
 		(install -d $(DESTDIR)$(PREFIX)/$(MANDIR) && \
 		install -m $(DOCPERMS) doc/pwr.1 $(DESTDIR)$(PREFIX)/$(MANDIR) && \
-		gzip -f $(DESTDIR)$(PREFIX)/$(MANDIR)/pwr.1 \
-		man -u pwr)
-
+		gzip -f $(DESTDIR)$(PREFIX)/$(MANDIR)/pwr.1)
 run: pwr
 	./pwr
 
