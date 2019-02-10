@@ -45,9 +45,9 @@ static struct option long_options[] = {
 };
 
 // prints usage
-// note that err is expected to be 0 when succsessful
 void usage(char *progpth, int err)
 {
+	// note that err is expected to be 0 when succsessful
 	fprintf(err ? stderr : stdout, usagestr, progpth);
 	exit(err);
 };
