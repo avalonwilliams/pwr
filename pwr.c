@@ -92,6 +92,7 @@ int pwr()
 // gets the power of the specified battery
 int fpwr(const char *frcbat)
 {
+	// TODO: Find a cleaner way to do this
 	char *tmp = malloc(
 		sizeof("/sys/class/power_supply//capacity") 
 		+ sizeof(frcbat) 
@@ -116,7 +117,7 @@ int main(int argc, char **argv)
 			pwrfmt = optarg;
 			break;
 		case 's':
-			battery = optarg;	
+			battery = optarg;
 			break;
 		case 'h':
 			usage(argv[0], EXIT_SUCCESS);
@@ -128,7 +129,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	printf(pwrfmt, battery ? fpwr(battery) : pwr());	
+	printf(pwrfmt, battery ? fpwr(battery) : pwr());
 
 	return 0;
 }

@@ -38,7 +38,6 @@ debug: $(SOURCES)
 clean:
 	[ ! -f pwr ] || rm pwr
 	[ ! -f doc/pwr.1 ] || rm doc/pwr.1
-	[ ! -f doc/pwr.1.html ] || rm doc/pwr.1.html
 
 install: pwr
 	install -d $(DESTDIR)$(PREFIX)/$(BINDIR)
@@ -50,6 +49,7 @@ install: pwr
 		(install -d $(DESTDIR)$(PREFIX)/$(MANDIR) && \
 		install -m $(DOCPERMS) doc/pwr.1 $(DESTDIR)$(PREFIX)/$(MANDIR) && \
 		gzip -f $(DESTDIR)$(PREFIX)/$(MANDIR)/pwr.1)
+
 run: pwr
 	./pwr
 
