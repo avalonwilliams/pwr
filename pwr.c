@@ -57,7 +57,7 @@ int sysfspwr(const char *path)
 {
 	FILE *fptr;
 	int percent = 0;
-
+	
 	if ((fptr = fopen(path, "r"))) {
 		fscanf(fptr, "%d", &percent);
 		fclose(fptr);
@@ -78,7 +78,7 @@ int pwr()
 	int avrg = 0, avgtot = 0;
 
 	// Averages battery
-	for (int i = 0; i < glb.gl_pathc; i++)
+	for (size_t i = 0; i < glb.gl_pathc; i++)
 		avgtot += sysfspwr(glb.gl_pathv[i]);
 
 	avrg = avgtot / glb.gl_pathc;
@@ -103,6 +103,7 @@ int fpwr(const char *frcbat)
 
 	int batpwr = sysfspwr(tmp);
 	free(tmp);
+
 	return batpwr;
 }
 
