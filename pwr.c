@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <errno.h>
 #include <getopt.h>
 #include <glob.h>
@@ -23,34 +25,39 @@
 #include <stdlib.h>
 #include <string.h>
 
+// String printed out with --version
 static const char* versionstr = "pwr v1.0\n"
-				"Copyright (C) 2019 Aidan Williams\n"
-				"License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
-				"This is free software: you are free to change and redistribute it.\n"
-				"There is NO WARRANTY, to the extent permitted by law.\n\n"
-				"Written by Aidan Williams";
+	"Copyright (C) 2019 Aidan Williams\n"
+	"License GPLv3+: GNU GPL version 3 or later "
+	"<https://gnu.org/licenses/gpl.html>\n"
+	"This is free software: you are free to change and redistribute it.\n"
+	"There is NO WARRANTY, to the extent permitted by law.\n\n"
+	"Written by Aidan Williams";
 
+// String printed out with --usage
 static const char* usagestr = "Usage: %s [OPTIONS]\n\n"
-			      "-h, --help   \tPrints this help text\n"
-			      "-v, --version\tPrints the version information\n"
-			      "-f, --format \tPrints output according to the format string defined by the argument given\n"
-			      "-s, --single \tGets power from battery defined by argument given\n";
+	"-h, --help   \tPrints this help text\n"
+	"-v, --version\tPrints the version information\n"
+	"-f, --format \tFormats output by argument given\n"
+	"-s, --single \tGets power from battery defined by argument given\n";
 
 static struct option long_options[] = {
 	{ "help",    no_argument,       0, 'h' },
 	{ "format",  required_argument, 0, 'f' },
 	{ "single",  required_argument, 0, 's' },
 	{ "version", no_argument,       0, 'v' },
-	{ 0, 0, 0, 0 }
+	{ 0,         0,                 0, 0   }
 };
 
-// prints usage
+
+// Prints usage
 void usage(char *progpth, int err)
 {
-	// note that err is expected to be 0 when succsessful
+	// Note that err is expected to be 0 when succsessful
 	fprintf(err ? stderr : stdout, usagestr, progpth);
 	exit(err);
-};
+}
+
 
 // Internal for getting power from the path of a sysfs battery
 int sysfspwr(const char *path)
@@ -69,7 +76,8 @@ int sysfspwr(const char *path)
 	return percent;
 }
 
-// gets the average power of all of the system batteries
+
+// Gets the average power of all of the system batteries
 int pwr()
 {
 	glob_t glb;
@@ -89,29 +97,31 @@ int pwr()
 	return avrg;
 }
 
-// gets the power of the specified battery
-int fpwr(const char *frcbat)
+
+// Gets the power of the specified battery
+int fpwr(const char *bat)
 {
 	// TODO: Find a cleaner way to do this
 	char *tmp = malloc(
 		sizeof("/sys/class/power_supply//capacity") 
-		+ sizeof(frcbat) 
-		- 1 // account for null byte at end of strings
+		+ sizeof(bat) 
+		- 1 // Account for null byte at end of strings
 	);
 
-	sprintf(tmp, "/sys/class/power_supply/%s/capacity", frcbat);
+	sprintf(tmp, "/sys/class/power_supply/%s/capacity", bat);
 
 	int batpwr = sysfspwr(tmp);
 	free(tmp);
-
+	
 	return batpwr;
 }
+
 
 int main(int argc, char **argv)
 {
 	int opt;
-	char *battery = NULL, *pwrfmt = "%d\n";
-
+	char *battery = NULL, *pwrfmt = PWRFORMAT;
+	
 	while ((opt = getopt_long(argc, argv, "mf:s:hv", long_options, 0)) != -1) {
 		switch (opt) {
 		case 'f':
@@ -131,6 +141,6 @@ int main(int argc, char **argv)
 	}
 
 	printf(pwrfmt, battery ? fpwr(battery) : pwr());
-
+	
 	return 0;
 }
