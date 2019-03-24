@@ -1,3 +1,4 @@
+<!-- -*- mode: markdown; -*- -->
 pwr(1) -- prints power information
 ==================================
 

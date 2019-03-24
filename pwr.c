@@ -26,7 +26,8 @@
 #include <string.h>
 
 // String printed out with --version
-static const char* versionstr = "pwr v1.0\n"
+static const char *versionstr =
+	"pwr v1.0\n"
 	"Copyright (C) 2019 Aidan Williams\n"
 	"License GPLv3+: GNU GPL version 3 or later "
 	"<https://gnu.org/licenses/gpl.html>\n"
@@ -35,7 +36,8 @@ static const char* versionstr = "pwr v1.0\n"
 	"Written by Aidan Williams";
 
 // String printed out with --usage
-static const char* usagestr = "Usage: %s [OPTIONS]\n\n"
+static const char *usagestr =
+	"Usage: %s [OPTIONS]\n\n"
 	"-h, --help   \tPrints this help text\n"
 	"-v, --version\tPrints the version information\n"
 	"-f, --format \tFormats output by argument given\n"
@@ -48,7 +50,6 @@ static struct option long_options[] = {
 	{ "version", no_argument,       0, 'v' },
 	{ 0,         0,                 0, 0   }
 };
-
 
 // Prints usage
 void usage(char *progpth, int err)
@@ -120,7 +121,8 @@ int fpwr(const char *bat)
 int main(int argc, char **argv)
 {
 	int opt;
-	char *battery = NULL, *pwrfmt = PWRFORMAT;
+	char *battery = NULL;
+	char *pwrfmt = PWRFORMAT;
 	
 	while ((opt = getopt_long(argc, argv, "mf:s:hv", long_options, 0)) != -1) {
 		switch (opt) {
@@ -144,3 +146,4 @@ int main(int argc, char **argv)
 	
 	return 0;
 }
+
