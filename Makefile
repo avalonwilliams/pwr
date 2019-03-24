@@ -25,8 +25,7 @@ DOCPERMS ?= 644
 STD      ?= c99
 CC       ?= cc
 
-# Allows for dropping in code with minimal modifications to the makefile
-SOURCES := $(shell find ./ -name "*.c")
+SOURCES := pwr.c
 
 
 pwr: $(SOURCES)
