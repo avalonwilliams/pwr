@@ -70,8 +70,8 @@ int sysfspwr(const char *path)
 		fscanf(fptr, "%d", &percent);
 		fclose(fptr);
 	} else {
-		fprintf(stderr, "Error opening file: %s\n", path);
-		exit(EIO);
+		fprintf(stderr, "%s: %s\n", strerror(errno), path);
+		exit(errno);
 	}
 
 	return percent;
@@ -82,19 +82,27 @@ int sysfspwr(const char *path)
 int pwr()
 {
 	glob_t glb;
-	glob("/sys/class/power_supply/*/capacity", 0, 0, &glb);
 
-	int avrg = 0, avgtot = 0;
+	// GLOB_NOSORT is for speed
+	glob("/sys/class/power_supply/*/capacity", GLOB_NOSORT, 0, &glb);
 
+	// glb.gl_pathc is truthy even when it's a nonzero number
+	if (glb.gl_pathc < 1) {
+		globfree(&glb);
+		fputs("No batteries found\n", stderr);
+		exit(ENODEV);
+	}
+
+	int avrg = 0;
+	int avgtot = 0;
+	
 	// Averages battery
 	for (size_t i = 0; i < glb.gl_pathc; i++)
 		avgtot += sysfspwr(glb.gl_pathv[i]);
 
 	avrg = avgtot / glb.gl_pathc;
 
-	// Free up memory
 	globfree(&glb);
-
 	return avrg;
 }
 
@@ -133,10 +141,10 @@ int main(int argc, char **argv)
 			battery = optarg;
 			break;
 		case 'h':
-			usage(argv[0], EXIT_SUCCESS);
+			usage(argv[0], 0);
 		case 'v':
 			puts(versionstr);
-			exit(EXIT_SUCCESS);
+			return 0;
 		default:
 			usage(argv[0], EINVAL);
 		}
@@ -146,4 +154,3 @@ int main(int argc, char **argv)
 	
 	return 0;
 }
-
