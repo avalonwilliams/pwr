@@ -2,7 +2,7 @@
 ========
 * Support other UNIX-like operating systems
     * The BSDs
-    * Mac OS X
+    * OS X/Darwin
     * MINIX
     * AIX, HP-UX, and other dinosaurs
 * Packaging for linux distros

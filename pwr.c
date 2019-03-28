@@ -59,7 +59,7 @@ void usage(char *progpth, int err)
 	exit(err);
 }
 
-
+#if defined(__linux)
 // Internal for getting power from the path of a sysfs battery
 int sysfspwr(const char *path)
 {
@@ -76,11 +76,12 @@ int sysfspwr(const char *path)
 
 	return percent;
 }
-
+#endif
 
 // Gets the average power of all of the system batteries
 int pwr()
 {
+#if defined(__linux)
 	glob_t glb;
 
 	// GLOB_NOSORT is for speed
@@ -104,12 +105,17 @@ int pwr()
 
 	globfree(&glb);
 	return avrg;
+#else
+	fputs("Unsupported platform", stderr);
+	exit(1);
+#endif
 }
 
 
 // Gets the power of the specified battery
 int fpwr(const char *bat)
 {
+#if defined(__linux)
 	// TODO: Find a cleaner way to do this
 	char *tmp = malloc(
 		sizeof("/sys/class/power_supply//capacity") 
@@ -123,6 +129,10 @@ int fpwr(const char *bat)
 	free(tmp);
 	
 	return batpwr;
+#else
+	fputs("Unsupported platform", stderr);
+	exit(1);
+#endif
 }
 
 
