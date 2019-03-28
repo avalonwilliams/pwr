@@ -1,11 +1,11 @@
 # Future
 ========
 * Support other UNIX-like operating systems
-    * The BSDs
+    * OpenBSD, NetBSD, DragonflyBSD
     * OS X/Darwin
     * MINIX
     * AIX, HP-UX, and other dinosaurs
-* Packaging for linux distros
+* Packaging for GNU/Linux distros
     * Rpm (Fedora, SUSE, RHEL, etc.)
     * Deb (Ubuntu, Debian, etc.)
     * PKGBUILD (Arch Linux)

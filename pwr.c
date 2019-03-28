@@ -25,6 +25,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(__FreeBSD__)
+#include <stdint.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <dev/acpica/acpiio.h>
+#include <libexplain/ioctl.h>
+#endif
+
 // String printed out with --version
 static const char *versionstr =
 	"pwr v1.0\n"
@@ -78,6 +87,38 @@ int sysfspwr(const char *path)
 }
 #endif
 
+#if defined(__FreeBSD__)
+// Internal for getting power from the id of a battery
+int bsdpwr(int bat)
+{
+	static int acpi;
+	
+	// Try opening ACPI kernel interface
+	acpi = open("/dev/acpi", O_RDWR);
+	if (acpi < 0)
+		acpi = open("/dev/acpi", O_RDONLY);
+	
+	if (acpi < 0) {
+		fprintf(stderr, "%s: %s\n", strerror(errno), "/dev/acpi");
+		exit(errno);
+	}
+	
+	// Ask kernel nicely for battery information
+	union acpi_battery_ioctl_arg battio;
+	battio.unit = bat;
+	
+	if (ioctl(acpi, ACPIIO_BATT_GET_BATTINFO, &battio) < 0) {
+		fprintf(stderr, "ioctl error for battery %i: %s\n",bat, explain_ioctl(acpi, ACPIIO_BATT_GET_BATTINFO, &battio));
+		exit(EXIT_FAILURE);
+	}
+	
+	int percent = battio.battinfo.cap;
+	
+	close(acpi);
+	return percent;
+}
+#endif
+
 // Gets the average power of all of the system batteries
 int pwr()
 {
@@ -105,9 +146,11 @@ int pwr()
 
 	globfree(&glb);
 	return avrg;
+#elif defined(__FreeBSD__)
+	return bsdpwr(ACPI_BATTERY_ALL_UNITS);
 #else
-	fputs("Unsupported platform", stderr);
-	exit(1);
+	fputs("Unsupported platform\n", stderr);
+	exit(EXIT_FAILURE);
 #endif
 }
 
@@ -118,20 +161,22 @@ int fpwr(const char *bat)
 #if defined(__linux)
 	// TODO: Find a cleaner way to do this
 	char *tmp = malloc(
-		sizeof("/sys/class/power_supply//capacity") 
+		sizeof("/sys/class/power_supply/BAT/capacity") 
 		+ sizeof(bat) 
 		- 1 // Account for null byte at end of strings
 	);
 
-	sprintf(tmp, "/sys/class/power_supply/%s/capacity", bat);
+	sprintf(tmp, "/sys/class/power_supply/BAT%s/capacity", bat);
 
 	int batpwr = sysfspwr(tmp);
 	free(tmp);
 	
 	return batpwr;
-#else
-	fputs("Unsupported platform", stderr);
-	exit(1);
+#elif defined(__FreeBSD__)
+	return bsdpwr(atoi(bat));
+#else	
+	fputs("Unsupported platform\n", stderr);
+	exit(EXIT_FAILURE);
 #endif
 }
 
@@ -159,8 +204,6 @@ int main(int argc, char **argv)
 			usage(argv[0], EINVAL);
 		}
 	}
-
 	printf(pwrfmt, battery ? fpwr(battery) : pwr());
-	
 	return 0;
 }

@@ -24,15 +24,15 @@ DOCPERMS ?= 644
 # Build variables
 STD      ?= c99
 CC       ?= cc
+BSDFLAGS ?= $(shell pkg-config --cflags --libs libexplain)
 
 SOURCES := pwr.c
 
-
 pwr: $(SOURCES)
-	$(CC) -std=$(STD) $(CFLAGS) -o pwr $(SOURCES)
+	$(CC) $(BSDFLAGS) -std=$(STD) $(CFLAGS) -o pwr $(SOURCES)
 
 debug: $(SOURCES)
-	$(CC) -std=$(STD) $(CFLAGS) -g -o pwr $(SOURCES)
+	$(CC) $(BSDFLAGS) -std=$(STD) $(CFLAGS) -g -o pwr $(SOURCES)
 
 clean:
 	[ ! -f pwr ] || rm pwr
