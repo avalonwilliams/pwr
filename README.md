@@ -3,12 +3,20 @@ This project prints power statistics for GNU/Linux and FreeBSD
 
 ## Install
 ### GNU/Linux
+(Optional) Install ronn to make man pages, and run `make docs` before installing
+
 Clone & cd into repo, then use GNU Make to install:
 ```
-make && sudo make install
+make 
+sudo make install
 ```
 
 ### FreeBSD
+(Optional) Install ronn to make man pages, and run `make docs` before installing:
+```
+pkg install rubygem-ronn
+```
+
 Install dependencies:
 ```
 pkg install libexplain
