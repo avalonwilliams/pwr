@@ -19,11 +19,15 @@
 
 #include <errno.h>
 #include <getopt.h>
-#include <glob.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+// Platform specific includes
+#if defined(__linux)
+#include <glob.h>
+#endif
 
 #if defined(__FreeBSD__)
 #include <stdint.h>
@@ -108,7 +112,13 @@ int bsdpwr(int bat)
 	battio.unit = bat;
 	
 	if (ioctl(acpi, ACPIIO_BATT_GET_BATTINFO, &battio) < 0) {
-		fprintf(stderr, "ioctl error for battery %i: %s\n",bat, explain_ioctl(acpi, ACPIIO_BATT_GET_BATTINFO, &battio));
+		fprintf(
+			stderr, 
+			"ioctl error for battery %i: %s\n", 
+			bat, 
+			explain_ioctl(acpi, ACPIIO_BATT_GET_BATTINFO, &battio)
+		);
+
 		exit(EXIT_FAILURE);
 	}
 	
