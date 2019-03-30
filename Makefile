@@ -24,7 +24,10 @@ DOCPERMS ?= 644
 # Build variables
 STD      ?= c99
 CC       ?= cc
-BSDFLAGS ?= $(shell pkg-config --cflags --libs libexplain)
+
+ifeq ($(shell uname),FreeBSD)
+	BSDFLAGS ?= $(shell pkg-config --cflags --libs libexplain)
+endif
 
 SOURCES := pwr.c
 
