@@ -1,4 +1,4 @@
-# [THIS PROJECT HAS BEEN MIGRATED TO GITLAB](https://github.com/AGitBoy/pwr)
+# [THIS PROJECT HAS BEEN MIGRATED TO GITLAB](https://gitlab.com/AGitBoy/pwr)
 
 # Pwr
 This project prints power statistics for GNU/Linux and FreeBSD
